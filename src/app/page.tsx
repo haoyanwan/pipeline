@@ -3,7 +3,10 @@
 import Image from "next/image";
 import styles from "../../styles/page.module.css";
 import { BackgroundVariant } from '@xyflow/react';
-import { useCallback } from 'react';
+import { 
+  useCallback, 
+  useMemo 
+} from 'react';
 import {
   ReactFlow,
   useNodesState,
@@ -17,17 +20,17 @@ import {
   Background,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-
+import OpenFileNode from '../../props/OpenFileNode'
 
 const initialNodes = [
-  { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
+  { id: '1', type: 'openFile', position: { x: 0, y: 0 }, data: { label: '1' } },
   { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
 ];
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
 
 
 export default function Home() {
-
+  const nodeTypes = useMemo(() => ({ openFile: OpenFileNode }), []);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes); 
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
@@ -44,6 +47,9 @@ export default function Home() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        fitView={true}
+        elevateEdgesOnSelect={true}
+        nodeTypes={nodeTypes}
       >
         <MiniMap />
         <Controls />
